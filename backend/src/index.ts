@@ -2,15 +2,20 @@ import express from "express";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import { UserModel } from "./db";
+import 'dotenv/config';
 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URL = 'mongodb+srv://mrcodefrost:My%40Frost2022.@cluster0.muweh.mongodb.net/Brainer?retryWrites=true&w=majority&appName=Cluster0';
-const JWT_PASSWORD = "123456789";
+
+const JWT_PASSWORD = process.env.JWT_PASSWORD!;
 app.use(express.json());
 
-mongoose.connect(MONGODB_URL)
+if (!process.env.MONGODB_URL) {
+  throw new Error('MONGODB_URL environment variable is not set');
+}
+
+mongoose.connect(process.env.MONGODB_URL)
     .then(
         () => {
             console.log("MongoDB connected");
@@ -84,6 +89,9 @@ app.post("/api/v1/signin", async (req, res) => {
 });
 
 app.post("/api/v1/content", (req, res) => {
+
+    const link = req.body.link;
+    const type = req.body.type;
 
 });
 
